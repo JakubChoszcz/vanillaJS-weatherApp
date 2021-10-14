@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="form">
+            <form onsubmit="weatherFunction(event)">
+                <input
+                    id="input"
+                    type="text"
+                    placeholder="Search"
+                >
+                <button 
+                    id="button" 
+                    type="submit" 
+                    onchange="location()"
+                >
+                    <i class="fas fa-search" id="button-i"></i>
+                </button>
+            </form>
+        </div>
+
+        <script>
+            const API = {
+                key: '5fb9ae7f195e575e78d40ce0d60f19ba',
+                base: 'https://api.openweathermap.org/data/2.5/'
+            }
+
+            const input = document.querySelector('input')
+
+            const weatherFunction = e => {
+                fetch(`${API.base}weather?q=${input.value}&units=metric&appid=${API.key}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const newDate = new Date()
+                        
+                        document.getElementById('location').innerHTML = `${data.name}, ${data.sys.country}`
+                        document.getElementById('time').innerHTML = `${newDate.getHours()}:${newDate.getMinutes()}`
+                        document.getElementById('temperature').innerHTML = `${Math.round(data.main.temp)}°`
+                        document.getElementById('wind').innerHTML = `Wind: ${data.wind.speed}m/s`
+                        document.getElementById('humidity').innerHTML = `Humidity: ${data.main.humidity}%`
+                        document.getElementById('pressure').innerHTML = `Pressure: ${data.main.pressure}hPa`
+                        document.getElementById('weather').innerHTML = `Weather: ${data.weather[0].main}`
+
+                        document.getElementById('result').style.display = 'flex'
+                    })
+                    .catch(err => console.log(err))
+
+                input.value = ''
+                e.preventDefault()
+            }
+        </script>
+
+        <div id="result">
+            <p id="location"></p>
+            
+            <p id='time'></p>
+
+            <p id='temperature'></p>
+
+            <ul>
+                <li>
+                    <p id='wind'></p>
+                </li>
+                <li>
+                    <p id='humidity'></p>
+                </li>
+                <li>
+                    <p id='pressure'></p>
+                </li>
+                <li>
+                    <p id='weather'></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+        
+    <footer>
+        <p id="author">Designed & Created By <a href="https://github.com/JakubChoszcz" target="_blank">Choszcz</a></p>
+    </footer>
+</body>
+</html>
